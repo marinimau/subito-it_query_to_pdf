@@ -17,8 +17,8 @@ class CarItem:
     The subito.it research car item
     """
 
-    def __init__(self, factory=None, model=None, version=None, fuel_type=None, year=None, km=None, insertion_link=None,
-                 city=None, photos=None):
+    def __init__(self, factory="", model="", version="", fuel_type="", year="", km="", insertion_link="",
+                 city="", photos=""):
         """
         Constructor
         :param factory: the factory name
@@ -40,6 +40,69 @@ class CarItem:
         self._insertion_link = insertion_link
         self._city = city
         self._photos = photos
+
+    def factory(self):
+        """
+        get factory
+        :return: the factory value
+        """
+        return self._factory
+
+    def model(self):
+        """
+        get model
+        :return: the model value
+        """
+        return self._model
+
+    def version(self):
+        """
+        get version
+        :return: the version value
+        """
+        return self._version
+
+    def fuel(self):
+        """
+        get fuel type
+        :return: the fuel type value
+        """
+        return self._fuel_type
+
+    def year(self):
+        """
+        get year
+        :return: the year value
+        """
+        return self._year
+
+    def km(self):
+        """
+        get km
+        :return: the km value
+        """
+        return self._km
+
+    def link(self):
+        """
+        get link
+        :return: the link value
+        """
+        return self._insertion_link
+
+    def city(self):
+        """
+        get city
+        :return: the city value
+        """
+        return self._city
+
+    def photos(self):
+        """
+        get photos
+        :return: photos value
+        """
+        return self._photos
 
     def __str__(self):
         """

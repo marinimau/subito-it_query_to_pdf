@@ -16,12 +16,13 @@ from pdf_generator import PDF
 
 if __name__ == '__main__':
     for url in research_urls:
-        # car_list = download_data(url)
-
+        car_list = download_data(url)
         p = PDF()
-        for car in range(5): #car_list:
+        for car in car_list:
             p.add_page()
-            p.header()
+            p.custom_header(car)
+            p.add_images(car.photos())
+
         p.save(slugify(url))
 
 
