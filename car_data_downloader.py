@@ -41,6 +41,13 @@ class CarItem:
         self._city = city
         self._photos = photos
 
+    def __str__(self):
+        """
+        to string method
+        :return:
+        """
+        return str(self._insertion_link).replace(':', '').replace('/', '-').replace('.', '_')
+
 
 def make_request(url):
     """

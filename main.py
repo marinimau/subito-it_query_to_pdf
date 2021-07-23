@@ -7,11 +7,21 @@
 #   Credits: @marinimau (https://github.com/marinimau)
 #
 
+from slugify import slugify
+
 from car_data_downloader import download_data
 from conf import research_urls
+from pdf_generator import PDF
+
 
 if __name__ == '__main__':
     for url in research_urls:
-        download_data(url)
+        # car_list = download_data(url)
+
+        p = PDF()
+        for car in range(5): #car_list:
+            p.add_page()
+            p.header()
+        p.save(slugify(url))
 
 
