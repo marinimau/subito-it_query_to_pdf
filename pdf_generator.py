@@ -42,6 +42,17 @@ class PDF(FPDF):
         # Line break
         self.ln(20)
 
+    def custom_footer(self, car):
+        """
+        Create the custom footer
+        :param car: the car obj
+        :return:
+        """
+        self.ln(20)
+        # Select Arial bold 15
+        self.set_font('Arial', 'B', 10)
+        self.cell(pdf_w, 8, txt='Link: ' + car.link(), border=1)
+
     def add_images(self, photos, car_id):
         """
         add images to pdf
@@ -52,12 +63,16 @@ class PDF(FPDF):
             urllib.request.urlretrieve(str(photos[0]), "photos/" + car_id + ".jpeg")
             self.image("photos/" + car_id + ".jpeg", x=20, h=pdf_h/1.5 - 10, type='jpeg')
 
-    def save(self, title):
+    def save(self, title, is_private=False):
         """
         Save a pdf
         :param title: the title of the file
+        :param is_private: flag that indicates if document is private
         :return:
         """
-        self.output(str('outputs/' + title + '.pdf'), 'F')
+        if is_private:
+            self.output(str('outputs/private/' + title + '.pdf'), 'F')
+        else:
+            self.output(str('outputs/' + title + '.pdf'), 'F')
 
 

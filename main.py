@@ -17,13 +17,19 @@ from pdf_generator import PDF
 if __name__ == '__main__':
     for url in research_urls:
         car_list = download_data(url)
-        p = PDF()
+        public = PDF()
+        private = PDF()
         i = 0
         for car in car_list:
-            p.add_page()
-            p.custom_header(car)
-            p.add_images(car.photos(), str(i))
+            public.add_page()
+            private.add_page()
+            public.custom_header(car)
+            private.custom_header(car)
+            public.add_images(car.photos(), str(i))
+            private.add_images(car.photos(), str(i))
+            private.custom_footer(car)
             i += 1
-        p.save(slugify(url))
+        public.save(slugify(url))
+        private.save(slugify(url), is_private=True)
 
 
