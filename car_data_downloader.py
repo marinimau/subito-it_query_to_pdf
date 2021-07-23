@@ -14,12 +14,14 @@ from bs4 import BeautifulSoup
 
 from utils import get_class
 
+
 class CarItem:
     """
     The subito.it research car item
     """
 
-    def __init__(self, factory, model, version, fuel_type, year, km, photos):
+    def __init__(self, factory=None, model=None, version=None, fuel_type=None, year=None, km=None, insertion_link=None,
+                 city=None):
         """
         Constructor
         :param factory: the factory name
@@ -28,15 +30,17 @@ class CarItem:
         :param fuel_type: the fuel type
         :param year: the year
         :param km: the km of the car
-        :param photos: an array containing the url of the photos
+        :param insertion_link: the link of the insertion
+        :param city: the city of the insertion
         """
-        factory = factory
-        model = model
-        version = version
-        fuel_type = fuel_type
-        year = year
-        km = km
-        photos = photos
+        self.factory = factory
+        self.model = model
+        self.version = version
+        self.fuel_type = fuel_type
+        self.year = year
+        self.km = km
+        self.insertion_link = insertion_link
+        self.city = city
 
 
 def make_request(url):
@@ -70,8 +74,19 @@ def read_item_page(url):
     :return:
     """
     item_soup = make_request(url)
-    print(item_soup)
-    print('\n\n\n\n\n\n\n')
+    car_history_items = get_class(item_soup, 'feature-list_feature__2QHiI', 'li')
+    process_car_history_items(car_history_items)
+
+
+def process_car_history_items(car_history_items):
+    """
+    Process the car history items and return a CarItem obj
+    :param car_history_items: the soup of car history section
+    :return: the car obj
+    """
+    for item in car_history_items:
+        label = get_class(item, 'feature-list_label__kALYE', 'span')[0].text
+        print(label)
 
 
 def find_km(insertion, car_obj):
