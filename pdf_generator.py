@@ -6,7 +6,9 @@
 #   Repository: https://github.com/marinimau/subito-it_query_to_pdf
 #   Credits: @marinimau (https://github.com/marinimau)
 #
-import requests
+
+import urllib.request
+
 from fpdf import FPDF
 
 pdf_w = 270
@@ -40,15 +42,15 @@ class PDF(FPDF):
         # Line break
         self.ln(20)
 
-    def add_images(self, photos):
+    def add_images(self, photos, car_id):
         """
         add images to pdf
         :param photos: the photo urls
+        :param car_id: the document id
         """
         if len(photos) > 0:
-            self.image(str(photos[0]), x=0, w=pdf_w/2 - 10, type='jpeg')
-        if len(photos) > 0:
-            self.image(str(photos[1]), x=pdf_w/2, w=pdf_w/2 - 10, type='jpeg')
+            urllib.request.urlretrieve(str(photos[0]), "photos/" + car_id + ".jpeg")
+            self.image("photos/" + car_id + ".jpeg", x=20, h=pdf_h/1.5 - 10, type='jpeg')
 
     def save(self, title):
         """

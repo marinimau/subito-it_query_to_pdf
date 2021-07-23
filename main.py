@@ -18,11 +18,12 @@ if __name__ == '__main__':
     for url in research_urls:
         car_list = download_data(url)
         p = PDF()
+        i = 0
         for car in car_list:
             p.add_page()
             p.custom_header(car)
-            p.add_images(car.photos())
-
+            p.add_images(car.photos(), str(i))
+            i += 1
         p.save(slugify(url))
 
 
