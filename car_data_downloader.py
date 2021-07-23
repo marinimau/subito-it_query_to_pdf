@@ -8,11 +8,8 @@
 #
 
 import requests
-import re
 
 from bs4 import BeautifulSoup
-
-from utils import get_class
 
 
 class CarItem:
@@ -21,7 +18,7 @@ class CarItem:
     """
 
     def __init__(self, factory=None, model=None, version=None, fuel_type=None, year=None, km=None, insertion_link=None,
-                 city=None):
+                 city=None, photos=None):
         """
         Constructor
         :param factory: the factory name
@@ -32,6 +29,7 @@ class CarItem:
         :param km: the km of the car
         :param insertion_link: the link of the insertion
         :param city: the city of the insertion
+        :param photos: the photo url list
         """
         self._factory = factory
         self._model = model
@@ -41,9 +39,7 @@ class CarItem:
         self._km = km
         self._insertion_link = insertion_link
         self._city = city
-
-    def km(self):
-        return self._km
+        self._photos = photos
 
 
 def make_request(url):
@@ -56,30 +52,46 @@ def make_request(url):
     return BeautifulSoup(http_response, 'html.parser')
 
 
+def get_class(soup, class_css, tag_name='div'):
+    """
+    Get divs with the given class
+    :param soup: the html soup
+    :param class_css: the class name
+    :param tag_name: the markup tag, default is div
+    :return the list of divs with the given class
+    """
+    return soup.find_all(tag_name, class_=str(class_css))
+
+
 def download_data(url):
     """
     Download the data from a research url
     :param url: the subito.it research url
-    :return:
+    :return: a list that contains a car object for each car
     """
     soup = make_request(url)
+    car_list = []
     car_insertions = get_class(soup, 'items__item BigCard-module_card__1pCxB')
     for insertion in car_insertions:
         link = get_class(insertion, 'BigCard-module_link__3TIKt', tag_name='a')
         if link is not None and len(link) > 0:
-            read_item_page(link[0]['href'])
+            car_list.append(read_item_page(link[0]['href']))
+    return car_list
 
 
 def read_item_page(url):
     """
     Load item page and get car attributes and photo
     :param url:
-    :return:
+    :return: the car obj
     """
     item_soup = make_request(url)
     car_history_items = get_class(item_soup, 'feature-list_feature__2QHiI', 'li')
     city = get_class(item_soup, 'AdInfo_ad-info__location__text__1kXDa', 'span')[0].text
-    process_car_history_items(car_history_items, CarItem(insertion_link=url, city=city))
+    photos = [photo['src'] for photo in get_class(item_soup, 'CarouselCell_image__dW-gN', 'img')]
+    car_instance = CarItem(insertion_link=url, city=city, photos=photos)
+    process_car_history_items(car_history_items, car_instance)
+    return car_instance
 
 
 def process_car_history_items(car_history_items, car_instance):
