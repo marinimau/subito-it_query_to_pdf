@@ -7,3 +7,6 @@
 #   Credits: @marinimau (https://github.com/marinimau)
 #
 
+research_urls = [
+    'https://www.subito.it/annunci-sardegna/vendita/auto/?cb=000008&cm=000024&&pe=1000&ye=2003'
+]

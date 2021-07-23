@@ -1,16 +1,17 @@
-# This is a sample Python script.
+#
+#   subito-it_query_to_pdf copyright © 2021 - all rights reserved
+#   Created at: 23/07/21
+#   By: mauromarini
+#   License: MIT
+#   Repository: https://github.com/marinimau/subito-it_query_to_pdf
+#   Credits: @marinimau (https://github.com/marinimau)
+#
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+from car_data_downloader import download_data
+from conf import research_urls
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    for url in research_urls:
+        download_data(url)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
