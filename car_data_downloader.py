@@ -17,7 +17,7 @@ class CarItem:
     The subito.it research car item
     """
 
-    def __init__(self, factory="", model="", version="", fuel_type="", year="", km="", insertion_link="",
+    def __init__(self, factory="", model="", version="", fuel_type="", year="", km="", advertisement_link="",
                  city="", photos=""):
         """
         Constructor
@@ -27,8 +27,8 @@ class CarItem:
         :param fuel_type: the fuel type
         :param year: the year
         :param km: the km of the car
-        :param insertion_link: the link of the insertion
-        :param city: the city of the insertion
+        :param advertisement_link: the link of the advertisement
+        :param city: the city of the advertisement
         :param photos: the photo url list
         """
         self._factory = factory
@@ -37,7 +37,7 @@ class CarItem:
         self._fuel_type = fuel_type
         self._year = year
         self._km = km
-        self._insertion_link = insertion_link
+        self._advertisement_link = advertisement_link
         self._city = city
         self._photos = photos
 
@@ -90,7 +90,7 @@ class CarItem:
         get link
         :return: the link value
         """
-        return self._insertion_link
+        return self._advertisement_link
 
     def city(self):
         """
@@ -111,7 +111,7 @@ class CarItem:
         to string method
         :return:
         """
-        return str(self._insertion_link).replace(':', '').replace('/', '-').replace('.', '_')
+        return str(self._advertisement_link).replace(':', '').replace('/', '-').replace('.', '_')
 
 
 def make_request(url):
@@ -143,9 +143,9 @@ def download_data(url):
     """
     soup = make_request(url)
     car_list = []
-    car_insertions = get_class(soup, 'items__item BigCard-module_card__1pCxB')
-    for insertion in car_insertions:
-        link = get_class(insertion, 'BigCard-module_link__3TIKt', tag_name='a')
+    car_advertisements = get_class(soup, 'items__item BigCard-module_card__1pCxB')
+    for advertisement in car_advertisements:
+        link = get_class(advertisement, 'BigCard-module_link__3TIKt', tag_name='a')
         if link is not None and len(link) > 0:
             car_list.append(read_item_page(link[0]['href']))
     return car_list
@@ -161,7 +161,7 @@ def read_item_page(url):
     car_history_items = get_class(item_soup, 'feature-list_feature__2QHiI', 'li')
     city = get_class(item_soup, 'AdInfo_ad-info__location__text__1kXDa', 'span')[0].text
     photos = [photo['src'] for photo in get_class(item_soup, 'CarouselCell_image__dW-gN', 'img')]
-    car_instance = CarItem(insertion_link=url, city=city, photos=photos)
+    car_instance = CarItem(advertisement_link=url, city=city, photos=photos)
     process_car_history_items(car_history_items, car_instance)
     return car_instance
 
