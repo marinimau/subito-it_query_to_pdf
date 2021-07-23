@@ -60,6 +60,8 @@ class CarItem:
         get version
         :return: the version value
         """
+        if len(self._version) > 20:
+            return self._version[:20]
         return self._version
 
     def fuel(self):
