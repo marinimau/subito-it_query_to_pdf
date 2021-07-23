@@ -33,14 +33,17 @@ class CarItem:
         :param insertion_link: the link of the insertion
         :param city: the city of the insertion
         """
-        self.factory = factory
-        self.model = model
-        self.version = version
-        self.fuel_type = fuel_type
-        self.year = year
-        self.km = km
-        self.insertion_link = insertion_link
-        self.city = city
+        self._factory = factory
+        self._model = model
+        self._version = version
+        self._fuel_type = fuel_type
+        self._year = year
+        self._km = km
+        self._insertion_link = insertion_link
+        self._city = city
+
+    def km(self):
+        return self._km
 
 
 def make_request(url):
@@ -75,30 +78,39 @@ def read_item_page(url):
     """
     item_soup = make_request(url)
     car_history_items = get_class(item_soup, 'feature-list_feature__2QHiI', 'li')
-    process_car_history_items(car_history_items)
+    city = get_class(item_soup, 'AdInfo_ad-info__location__text__1kXDa', 'span')[0].text
+    process_car_history_items(car_history_items, CarItem(insertion_link=url, city=city))
 
 
-def process_car_history_items(car_history_items):
+def process_car_history_items(car_history_items, car_instance):
     """
     Process the car history items and return a CarItem obj
     :param car_history_items: the soup of car history section
-    :return: the car obj
+    :param car_instance: the car instance
     """
     for item in car_history_items:
         label = get_class(item, 'feature-list_label__kALYE', 'span')[0].text
-        print(label)
+        value = get_class(item, 'feature-list_value__2nzDw', 'span')[0].text
+        evaluate_item(label, value, car_instance)
 
 
-def find_km(insertion, car_obj):
+def evaluate_item(label, value, car_instance):
     """
-    Find the km of the current car
-    :param insertion: the bs4 insertion obj
-    :param car_obj: a CarItem instance
+    Evaluate the item and insert the value in the correct field of te car isntance
+    :param label: the item label
+    :param value: the item value
+    :param car_instance: the car obj
     :return:
     """
-    try:
-        price = insertion.find('p', class_=re.compile(r'price')).contents[0]
-        # at the moment (20.5.2021) the price is under the 'p' tag with 'span' inside if shipping available
-    except:
-        price = "Unknown price"
-    car_obj.price = price
+    if label == 'Marca':
+        car_instance._factory = value
+    elif label == 'Modello':
+        car_instance._model = value
+    elif label == 'Versione':
+        car_instance._version = value
+    elif label == 'Carburante':
+        car_instance._fuel_type = value
+    elif label == 'Immatricolazione':
+        car_instance._year = value
+    elif label == 'Km':
+        car_instance._km = value
