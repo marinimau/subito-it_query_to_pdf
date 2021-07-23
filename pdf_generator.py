@@ -22,7 +22,7 @@ class PDF(FPDF):
 
     def __init__(self):
         """
-        constructoor
+        constructor
         """
         super().__init__(orientation='L', format='A4')
 
