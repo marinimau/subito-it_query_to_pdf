@@ -1,6 +1,8 @@
 # Subito.it query to pdf
 
-works only for cars
+Given one or more Subito.it car research url, generate pdf(s) containing the specs and the photo of the cars in the ads.
+
+*works only for cars*
 
 ## Instructions
 
